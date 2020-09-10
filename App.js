@@ -4,6 +4,7 @@ import MealsScreen from "./screens/Meals";
 import Modal from "./screens/Modal";
 import LoginScreen from "./screens/Login";
 import RegisterScreen from "./screens/Register";
+import AuthLoading from "./screens/AuthLoading";
 
 const OnBoardingNavigator = createStackNavigator(
   {
@@ -39,11 +40,12 @@ const RootStack = createStackNavigator(
 );
 const BaseStack = createSwitchNavigator(
   {
+    AuthLoading,
     OnBoarding: OnBoardingNavigator,
     Root: RootStack,
   },
   {
-    initialRouteName: "OnBoarding",
+    initialRouteName: "AuthLoading",
   }
 );
 

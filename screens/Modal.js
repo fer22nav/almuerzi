@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, Button, AsyncStorage } from "react-native";
 import useFetch from "../hooks/useFetch";
 
 export default ({ navigation }) => {
@@ -20,18 +20,27 @@ export default ({ navigation }) => {
           <Button
             title="Aceptar"
             onPress={() => {
-              fetch("https://serverless.fer22nav.vercel.app/api/orders", {
-                method: "POST",
-                headers: {
-                  "Content-type": "application/json",
-                },
-                body: JSON.stringify({
-                  meal_id: id,
-                  user_id: "lalala",
-                }),
-              }).then(() => {
-                alert("Orden fue generada con exito");
-                navigation.navigate("Meals");
+              AsyncStorage.getItem("token").then((x) => {
+                if (x) {
+                  fetch("https://serverless.fer22nav.vercel.app/api/orders", {
+                    method: "POST",
+                    headers: {
+                      "Content-type": "application/json",
+                      authorization: x,
+                    },
+                    body: JSON.stringify({
+                      meal_id: id,
+                    }),
+                  }).then((x) => {
+                    console.log(x.status);
+                    if (x.status !== 201) {
+                      return alert("La orden no pudo ser generada!");
+                    }
+                    alert("Orden fue generada con exito");
+                    navigation.navigate("Meals");
+                  });
+                }
+                alert("La orden no pudo ser generada!");
               });
             }}
           />
